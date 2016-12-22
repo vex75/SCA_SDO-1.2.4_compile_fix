@@ -1,0 +1,280 @@
+<!--
++-----------------------------------------------------------------------------+
+| (c) Copyright IBM Corporation 2006.                                         |
+| All Rights Reserved.                                                        |
++-----------------------------------------------------------------------------+
+| Licensed under the Apache License, Version 2.0 (the "License"); you may not |
+| use this file except in compliance with the License. You may obtain a copy  |
+| of the License at -                                                         |
+|                                                                             |
+|                   http://www.apache.org/licenses/LICENSE-2.0                |
+|                                                                             |
+| Unless required by applicable law or agreed to in writing, software         |
+| distributed under the License is distributed on an "AS IS" BASIS, WITHOUT   |
+| WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.            |
+| See the License for the specific language governing  permissions and        |
+| limitations under the License.                                              |
++-----------------------------------------------------------------------------+
+| Authors: Graham Charters, Megan Beynon                                      |
+|                                                                             |
++-----------------------------------------------------------------------------+
+$Id: index.html,v 1.6 2008/03/03 17:56:37 mfp Exp $
+-->
+<html>
+<title>Service Component Architecture Examples</title>
+<body>
+
+<h2>Service Component Architecture Examples</h2>
+
+<h3>Setup</h3>
+<table>
+<tr>
+<td>Check that you have the SDO extension loaded - <a href="phpinfo.php">PHP Info</a></td>
+</tr>
+<tr>
+<td>
+<br/>
+Extract the examples into the root of your Web server eg. C:\Program Files\Apache Group\Apache2\htdocs.  All the examples are contained in the examples directory, e.g. C:\Program Files\Apache Group\Apache2\htdocs\examples. 
+A number of samples are provided, which illustrate different aspects of the Service Component Architecture.  For example, how to call SCA components from a PHP script or another SCA Component, how to expose SCA components as Web services, how to consume them as a Web service, and so on.
+</td>
+</tr>
+</table>
+
+<h3>Local binding</h3>
+
+<h5>A script making a local call to an SCA Component</h5>
+<table>
+<tr>
+<td><a href="./Local/ScriptCallingLocalSCAComponent/HelloClient.php">ScriptCallingLocalSCAComponent</a></td>
+</tr>
+<tr>
+<td>
+HelloClient.php - PHP script: This script gets a proxy to the local SCA component (HelloService.php), and calls its sayHello() method, passing in the name 'Bertie'.<br/>
+HelloService.php - local SCA component: This component implements one method, sayHello($name), which takes in a name and returns the string "Hello $name".
+</td>
+</tr>
+</table>
+
+<h5>An SCA Component making a local call to another SCA Component</h5>
+<table>
+<tr>
+<td><a href="./Local/SCAComponentCallingLocalSCAComponent/HelloClient.php">SCAComponentCallingLocalSCAComponent</a></td>
+</tr>
+<tr>
+<td>
+HelloClient.php - PHP script: This script gets a proxy to a local SCA Component (SurnameService.php), and calls its sayHello() method, passing in the name 'Bertie'.<br/>
+SurnameService.php - local SCA component: This component implements one method sayHello($name) which takes in a name, adds the surname 'Beetle', and calls the sayHello() method on the local SCA component HelloService.php, passing in the new name.<br/>
+HelloService.php - local SCA component: This component implements one method sayHello($name) which takes in a name and returns the string 'Hello $name'.
+</td>
+</tr>
+</table>
+
+
+<h3>Soap Binding</h3>
+
+<h5>A script making a SOAP web service call to an SCA Component</h5>
+<table>
+<tr>
+<td><a href="./Soap/ScriptCallingRemoteSCAComponent/HelloClient.php">ScriptCallingRemoteSCAComponent</a></td>
+</tr>
+<tr>
+<td>
+HelloClient.php - PHP script: This script calls a remote SCA Component (HelloService.php) to cause it to generate its WSDL definition. It then gets a proxy to the remote SCA Component and calls its sayHello() method, passing in the name 'Freddie'.<br/>
+Note: The default location used for calling the service is http://localhost/examples/SCA/Soap/ScriptCallingRemoteSCAComponent/*.php. Please edit this location in HelloClient.php to point to the correct location in your environment if necessary, for example to add a port number.<br/>
+HelloService.php - remote SCA component: This component implements one method, sayHello($name), which takes in a name and returns the string 'Hello $name'.  It makes itself available as a Web service using the @binding.soap annotation.
+</td>
+</tr>
+</table>
+
+<h5>An SCA Component making a SOAP web service call to another SCA Component</h5>
+<table>
+<tr>
+<td><a href="./Soap/SCAComponentCallingRemoteSCAComponent/HelloClient.php">SCAComponentCallingRemoteSCAComponent</a></td>
+</tr>
+<tr>
+<td>
+HelloClient.php - PHP script: This script gets a proxy to a local SCA Component (SurnameService.php), and calls its sayHello() method, passing in the name 'Freddie'.<br/>
+Note: The default location used for calling the service is http://localhost/examples/SCA/Soap/SCAComponentCallingRemoteSCAComponent/*.php. Please edit this location in HelloClient.php to point to the correct location in your environment if necessary, for example to add a port number.<br/>
+SurnameService.php - local SCA component: This component implements one method sayHello($name) which takes in a name, adds the surname 'Fish', and calls the sayHello() method on the remote SCA component HelloService.php, passing in the new name.<br/>
+HelloService.php - remote SCA component: This component implements one method sayHello($name) which takes in a name and returns the string 'Hello $name'.
+</td>
+</tr>
+</table>
+
+<h5>A simple script making a SOAP web service call to an SCA Component using data structures</h5>
+<table>
+<tr>
+<td><a href="./Soap/SCAComponentUsingDataStructures/HelloClient.php">SCAComponentUsingDataStructures</a></td>
+</tr>
+<tr>
+<td>
+HelloClient.php - PHP script: This script gets a proxy to the local SCA Component (SurnameService.php), and calls its sayHello() method, passing in a list of names.<br/>
+Note: The default location used for calling the service is http://localhost/examples/SCA/Soap/SCAComponentUsingDataStructures/*.php. Please edit this location in HelloClient.php to point to the correct location in your environment if necessary, for example to add a port number.<br/>
+BatchService.php - remote SCA component: This component implement one method sayHello($names) which takes in a Service Data Object containing a number of names, and returns a new Service Data Object of the same format containing the string 'Hello $name' for each name.<br/>
+names.xsd - data structure schema: This file is a simple XML Schema containing one complex type, called 'people'. This contains a many-valued element called 'name' for holding the names of people.
+</td>
+</tr>
+</table>
+
+<h3>JSON-RPC Binding</h3>
+
+<h5>A script making a variety of JSON calls to an SCA Component</h5>
+<table>
+<tr>
+<td><a href="./JsonRpc/MailApplicationClient.php">MailApplicationClient</a></td>
+</tr>
+<tr>
+<td>
+</td>
+</tr>
+</table>
+
+<h3>XML-RPC Binding</h3>
+
+<h5>A script that uses the xmlrpc binding to drive another component</h5>
+<table>
+<tr>
+<td><a href="./XmlRpc/TestClient.php">TestClient.php</a></td>
+</tr>
+<tr>
+<td>Runs a script which calls a component locally, then the same component via the xmlrpc binding. 
+The results should be the same, of course, but note the rounding errors in the floating point return. 
+</td>
+</tr>
+</table>
+
+<h3>REST resource-oriented Binding</h3>
+
+<h5>A page that sends HTTP verbs to drive an SCA Component in the REST style</h5>
+<table>
+<tr>
+<td><a href="./RestResource/Orders.html">Orders</a></td>
+</tr>
+<tr>
+<td>
+</td>
+</tr>
+</table>
+
+<h5>Drive two methods of the component yourself from the browser</h5>
+<table>
+<tr>
+<td><a href="./RestResource/Orders.php">Orders.php</a></td>
+</tr>
+<tr>
+<td>Just following a link to Orders.php will send a GET and drive an enumerate and return XML
+</td>
+</tr>
+<tr>
+<td><a href="./RestResource/Orders.php/order2">Orders.php/order2</a></td>
+</tr>
+<tr>
+<td>Following a link to Orders.php/order2 will drive a GET for just orders2
+</td>
+</tr>
+<tr>
+<td>The other methods require HTTP POST, PUT and DELETE and cannot be driven just by following links.
+</td>
+</tr>
+</table>
+
+<h5>Rest resource binding</h5>
+<table>
+<tr>
+<td><a href="./RestResource/OrdersClient.html">OrdersClient</a></td>
+</tr>
+<tr>
+<td>A page that uses HTTP verbs to drive an SCA component as above, but that component drives another SCA component using the restresource binding. It will behave like the first example.
+</td>
+</tr>
+</table>
+
+<h3>ATOM Publishing Binding</h3>
+
+<h5>A page that calls a script that uses the atom binding to drive another component</h5>
+<table>
+<tr>
+<td><a href="./atom/test_contact_feed.php">test contact feed</a></td>
+</tr>
+<tr>
+<td>Runs a script which drives create, retrieve, update and delete against an atom feed.
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td><a href="./atom/ContactFeed.php">See the contents of the feed in the browser</a></td>
+</tr>
+<tr>
+<td>Just fetch the contents and let the browser format it using the <a href="http://microformats.org/wiki/xoxo">"xoxo"</a> microformat.
+</td>
+</tr>
+</table>
+
+<h3>First Steps With Soap, RestRpc and JsonRpc - HelloWorld</h3>
+<table>
+<tr>
+<td><a href="./helloworldphp/helloworld.html">A PHP script calling classes</a></td>
+<td>helloworld.php is a PHP script which calls two local classes - no SCA at all</td>
+</tr>
+<tr>
+<td><a href="./helloworldscalocalservice/helloworld.html">Using getService to get local proxies</a></td>
+<td>Helloworld is a PHP script which gets two local proxies to local components</td>
+</tr>
+<tr>
+<td><a href="./helloworldscalocalreference/helloworld.html">A component with a rest-rpc binding calls local components</a></td>
+<td>helloworld.php is an SCA component with a rest-rpc binding. This gets two local proxies as above. The web page invokes helloworld with a POST. </td>
+</tr>
+<tr>
+<td><a href="./helloworldscawsservice/Greeting.php?wsdl">Generate WSDL for the "Greeting" soap service</a></td>
+<td>Generating WSDL</td>
+</tr>
+<tr>
+<td><a href="./helloworldscawsservice/Reversing.php?wsdl">Generate WSDL for the "Reversing" soap service</a></td>
+<td>Generating WSDL</td>
+</tr>
+<tr>
+<td><a href="./helloworldscawsservice/helloworld.html">Using getService to get soap proxies</a></td>
+<td>Helloworld is a script which gets two soap web service proxies</td>
+</tr>
+<tr>
+<td><a href="./helloworldscawsreference/helloworld.html">A component with a rest-rpc binding calls remote soap services</a></td>
+<td>Helloworld.php is an SCA component with a rest-rpc binding. This gets two soap web service proxies as above. The web page invokes helloworld with a POST. </td>
+</tr>
+<tr>
+<td><a href="./helloworldscajsonrpc/helloworldrest.html">As above but using SDO to pass data</a></td>
+<td>Complex types and REST binding</td>
+</tr>
+<tr>
+<td><a href="./helloworldscajsonrpc/helloworld.php?smd">Generate an SMD</a></td>
+<td>Generating a JSON-RPC Service Method Description</td>
+</tr>
+</table>
+
+<h3>Incremental Adoption - SCA Email</h3>
+<table>
+<tr>
+<td><a href="./emailsimple/EmailService.php?wsdl">Generating EmailService WSDL</a></td>
+<td>Automatic WSDL generation</td>
+</tr>
+<tr>
+<td><a href="./emailsimple/email_form.html">Email with ws SCA service binding </a></td>
+<td>PHP script locally accessing SCA Service</td>
+</tr>
+<tr>
+<td><a href="./emailsimpleref/email_form.html">Email with ws SCA service and reference binding</a></td>
+<td>An SCA service accessing another SCA service</td>
+</tr>
+<tr>
+<td><a href="./emailcontact/ContactService.php?smd">Generate ContactService SMD</a></td>
+<td>Automatic SMD Generation</td>
+</tr>
+<tr>
+<td><a href="./emailcontact/email_form.html">Email with SDOs</a></td>
+<td>Complex types. Note this sample is written to work with DB2. Create a datable called email and apply contacts.sql before running</td>
+</tr>
+</table>
+
+</body>
+</html>
